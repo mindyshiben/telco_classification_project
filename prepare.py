@@ -18,8 +18,8 @@ def prep_telco(df):
     df['streaming_tv'] = df['streaming_tv'].replace({'No internet service':'No'})
     df['streaming_movies'] = df['streaming_movies'].replace({'No internet service':'No'})
     df['multiple_lines'] = df['multiple_lines'].replace({'No phone service':'No'})
-    dummy = pd.get_dummies(df[['gender', 'partner', 'dependents', 'phone_service', 'multiple_lines', 'tech_support', 'streaming_tv', 'streaming_movies', 'paperless_billing', 'online_backup', 'online_security', 'device_protection', 'churn', 'internet_service_type', 'payment_type', 'contract_type']],
-    dummy_na=False, drop_first=[True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True])
+    dummy = pd.get_dummies(df[['gender', 'partner', 'dependents', 'phone_service', 'multiple_lines', 'tech_support', 'streaming_tv', 'streaming_movies', 'paperless_billing', 'online_backup', 'online_security', 'device_protection', 'churn', 'internet_service_type', 'payment_type', 'contract_type', 'senior_citizen']],
+    dummy_na=False, drop_first=[True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True])
     dummy.rename(columns = {'gender_Male': 'e_gender_male', 'partner_Yes':'e_partner',
                                     'dependents_Yes':'e_dependents',
             'phone_service_Yes': 'e_phone_service', 'multiple_lines_Yes': 'e_multiple_lines',
@@ -29,7 +29,7 @@ def prep_telco(df):
             'internet_service_type_Fiber optic' : 'e_fiber_optic', 'internet_service_type_None': 'e_no_internet',
             'payment_type_Credit card (automatic)': 'e_cc_auto', 'payment_type_Electronic check': 'e_check_electric',
             'payment_type_Mailed check': 'e_check_mail', 'contract_type_One year': 'e_oneyr',
-            'contract_type_Two year': 'e_twoyr'}, inplace = True)
+            'contract_type_Two year': 'e_twoyr', 'senior_citizen_Yes': 'e_senior'}, inplace = True)
     df = pd.concat([dummy, df], axis=1)
     return df
 
