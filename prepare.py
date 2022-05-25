@@ -8,7 +8,7 @@ from sklearn.impute import SimpleImputer
 import acquire
 
 def prep_telco(df):
-    df = df.drop(['Unnamed: 0',	'customer_id', 'internet_service_type_id', 'payment_type_id', 'contract_type_id'], axis =1)
+    df = df.drop(['Unnamed: 0',	'internet_service_type_id', 'payment_type_id', 'contract_type_id'], axis =1)
     df['total_charges'] = pd.to_numeric(df['total_charges'], errors='coerce')
     df.dropna(subset=['total_charges'], inplace=True)
     df['online_security'] = df['online_security'].replace({'No internet service':'No'})
@@ -18,6 +18,8 @@ def prep_telco(df):
     df['streaming_tv'] = df['streaming_tv'].replace({'No internet service':'No'})
     df['streaming_movies'] = df['streaming_movies'].replace({'No internet service':'No'})
     df['multiple_lines'] = df['multiple_lines'].replace({'No phone service':'No'})
+    df['senior_citizen'] = df['senior_citizen'].astype('object')
+    df['senior_citizen'] = pd.Series(np.where(df.senior_citizen.values == 0, 'No', 'Yes'), df.index)
     dummy = pd.get_dummies(df[['gender', 'partner', 'dependents', 'phone_service', 'multiple_lines', 'tech_support', 'streaming_tv', 'streaming_movies', 'paperless_billing', 'online_backup', 'online_security', 'device_protection', 'churn', 'internet_service_type', 'payment_type', 'contract_type', 'senior_citizen']],
     dummy_na=False, drop_first=[True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True])
     dummy.rename(columns = {'gender_Male': 'e_gender_male', 'partner_Yes':'e_partner',
@@ -42,7 +44,3 @@ def train_validate_test_split(df, target, seed=123):
                                        stratify=train_validate[target])
         
     return train, validate, test
-
-    
-    
-
